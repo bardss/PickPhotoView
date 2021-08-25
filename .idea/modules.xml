@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PickPhotoApp.iml" filepath="$PROJECT_DIR$/.idea/modules/PickPhotoApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PickPhotoView/PickPhotoApp.PickPhotoView.iml" filepath="$PROJECT_DIR$/.idea/modules/PickPhotoView/PickPhotoApp.PickPhotoView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/PickPhotoApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/PickPhotoApp.app.iml" />
+    </modules>
+  </component>
+</project>
