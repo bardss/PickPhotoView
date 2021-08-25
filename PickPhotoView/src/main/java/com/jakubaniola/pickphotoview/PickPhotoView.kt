@@ -18,7 +18,7 @@ import com.jakubaniola.pickphotoview.utils.PermissionsUtil
 
 const val REQUEST_PHOTO = 36
 
-class PickPhotoView(
+internal class PickPhotoView(
     context: Context,
     private val mode: PickPhotoViewMode
 ) : FrameLayout(context), PickPhotoReceiver {

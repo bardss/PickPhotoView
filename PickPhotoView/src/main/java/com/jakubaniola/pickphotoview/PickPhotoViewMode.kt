@@ -1,6 +1,6 @@
 package com.jakubaniola.pickphotoview
 
-enum class PickPhotoViewMode {
+internal enum class PickPhotoViewMode {
     ONLY_SHOW,
     ENABLE_ADD
 }
