@@ -23,8 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
-                android:alpha="0.4"
-                android:src="@drawable/ic_picture" />
+                android:alpha="0.4"/>
 
         </androidx.cardview.widget.CardView>
 

@@ -3,6 +3,7 @@ package com.jakubaniola.pickphotoview
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -14,15 +15,17 @@ import com.jakubaniola.pickphotoview.PickPhotoViewMode.ENABLE_ADD
 import com.jakubaniola.pickphotoview.PickPhotoViewMode.ONLY_SHOW
 import com.jakubaniola.pickphotoview.utils.ImageUtils
 import com.jakubaniola.pickphotoview.utils.PermissionsUtil
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.random.Random
 
-
-const val REQUEST_PHOTO = 36
 
 internal class PickPhotoView(
     context: Context,
-    private val mode: PickPhotoViewMode
+    private val mode: PickPhotoViewMode,
+    private val placeholderPicture: Drawable
 ) : FrameLayout(context), PickPhotoReceiver {
 
+    private val requestPhotoCode = UniqueIdGenerator.generateNextId()
     private val selectedPictureImageView: ImageView
     private val editPictureImageView: ImageView
     private var takePhotoFileUri: Uri? = null
@@ -37,6 +40,11 @@ internal class PickPhotoView(
         editPictureImageView = findViewById(R.id.edit_picture_image_view)
         setupPickPhotoOnClick()
         setupView()
+        setupPlaceholderPicture()
+    }
+
+    private fun setupPlaceholderPicture() {
+        selectedPictureImageView.background = placeholderPicture
     }
 
     fun setPickPhotoFragment(pickPhotoActions: PickPhotoActions?) {
@@ -44,7 +52,7 @@ internal class PickPhotoView(
     }
 
     override fun onPicturePicked(requestCode: Int, resultCode: Int, intent: Intent?) {
-        if (requestCode == REQUEST_PHOTO && resultCode == Activity.RESULT_OK) {
+        if (requestCode == requestPhotoCode && resultCode == Activity.RESULT_OK) {
             intent?.data?.let { uri ->
                 onPickPhotoSuccess(uri)
             }
@@ -115,7 +123,7 @@ internal class PickPhotoView(
 
     private fun setupOnlyShowView() {
         editPictureImageView.visibility = View.GONE
-        selectedPictureImageView.alpha = 0.7f
+        selectedPictureImageView.alpha = 1f
     }
 
     private fun setupEnableAddView() {
@@ -182,7 +190,7 @@ internal class PickPhotoView(
         val photoPickerIntent =
             Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         photoPickerIntent.type = "image/*"
-        pickPhotoActions?.startActivityForResult(photoPickerIntent, REQUEST_PHOTO)
+        pickPhotoActions?.startActivityForResult(photoPickerIntent, requestPhotoCode)
     }
 
     private fun startActivityGalleryAndCamera() {
@@ -196,7 +204,7 @@ internal class PickPhotoView(
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, takePhotoFileUri)
             val chooser = Intent.createChooser(galleryPhoto, context.resources.getString(R.string.gallery))
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
-            pickPhotoActions?.startActivityForResult(chooser, REQUEST_PHOTO)
+            pickPhotoActions?.startActivityForResult(chooser, requestPhotoCode)
         }
     }
 }

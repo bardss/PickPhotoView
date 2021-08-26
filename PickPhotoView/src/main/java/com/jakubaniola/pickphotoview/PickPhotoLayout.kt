@@ -2,6 +2,7 @@ package com.jakubaniola.pickphotoview
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
@@ -12,6 +13,7 @@ class PickPhotoLayout : LinearLayout {
     private var pickPhotoActions: PickPhotoActions? = null
     private var pickPhotoReceiver: PickPhotoReceiver? = null
     private var mode: PickPhotoViewMode = PickPhotoViewMode.ONLY_SHOW
+    private lateinit var placeholderPicture: Drawable
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         savePickPhotoViewMode(context, attrs)
@@ -29,6 +31,8 @@ class PickPhotoLayout : LinearLayout {
         context.theme.obtainStyledAttributes(
             attrs, R.styleable.PickPhotoLayout, 0, 0
         ).apply {
+            placeholderPicture = getDrawable(R.styleable.PickPhotoLayout_placeholderPicture)
+                ?: context.resources.getDrawable(R.drawable.ic_picture)
             val modeValue = getInt(R.styleable.PickPhotoLayout_mode, 0)
             mode = PickPhotoViewMode.values()[modeValue]
         }
@@ -92,7 +96,7 @@ class PickPhotoLayout : LinearLayout {
     }
 
     private fun createPickPhotoView(): PickPhotoView {
-        return PickPhotoView(context, mode).apply {
+        return PickPhotoView(context, mode, placeholderPicture).apply {
             setPickPhotoFragment(pickPhotoActions)
         }
     }

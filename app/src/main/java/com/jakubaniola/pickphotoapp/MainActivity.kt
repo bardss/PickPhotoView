@@ -10,15 +10,13 @@ class MainActivity : AppCompatActivity(), PickPhotoActions {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
-
-    override fun onStart() {
-        super.onStart()
         findViewById<PickPhotoLayout>(R.id.pick_photo_layout).setPickPhotoFragment(this)
+        findViewById<PickPhotoLayout>(R.id.pick_photo_layout2).setPickPhotoFragment(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         findViewById<PickPhotoLayout>(R.id.pick_photo_layout).onPicturePicked(requestCode, resultCode, data)
+        findViewById<PickPhotoLayout>(R.id.pick_photo_layout2).onPicturePicked(requestCode, resultCode, data)
     }
 }
