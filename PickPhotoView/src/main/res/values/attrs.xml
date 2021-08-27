@@ -7,5 +7,6 @@
             <enum name="ENABLE_ADD_MULTIPLE" value="2"/>
         </attr>
         <attr name="placeholderPicture" format="integer"/>
+        <attr name="imageCompressQuality" format="integer"/>
     </declare-styleable>
 </resources>

@@ -12,14 +12,15 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.jakubaniola.pickphotoview.PickPhotoViewMode.*
-import com.jakubaniola.pickphotoview.utils.ImageUtils
+import com.jakubaniola.pickphotoview.utils.ImageFileHandler
 import com.jakubaniola.pickphotoview.utils.PermissionsUtil
 
 
 internal class PickPhotoView(
     context: Context,
     private val mode: PickPhotoViewMode,
-    private val placeholderPicture: Drawable
+    private val placeholderPicture: Drawable,
+    private val imageFileHandler: ImageFileHandler
 ) : FrameLayout(context), PickPhotoReceiver {
 
     private val requestPhotoCode = UniqueIdGenerator.generateNextId()
@@ -69,21 +70,21 @@ internal class PickPhotoView(
     }
 
     private fun onPickPhotoSuccess(uri: Uri) {
-        val pathToPhoto = ImageUtils.getPathFromUri(context, uri)
+        val pathToPhoto = imageFileHandler.getPathFromUri(context, uri)
         val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         if (storageDir != null) {
             val pathToOptimisedFile =
-                ImageUtils.saveOptimisedPictureFromPathAndReturnPath(pathToPhoto, storageDir)
+                imageFileHandler.saveOptimisedPictureFromPathAndReturnPath(pathToPhoto, storageDir)
             setPathAsSelectedPicture(pathToOptimisedFile)
         }
     }
 
     private fun onTakePhotoSuccess(uri: Uri) {
-        val pathToPhoto = ImageUtils.getPathFromUri(context, uri)
+        val pathToPhoto = imageFileHandler.getPathFromUri(context, uri)
         val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         if (storageDir != null) {
             val pathToOptimisedFile =
-                ImageUtils.overwriteOptimisedPictureFromPathAndReturnPath(pathToPhoto)
+                imageFileHandler.overwriteOptimisedPictureFromPathAndReturnPath(pathToPhoto)
             setPathAsSelectedPicture(pathToOptimisedFile)
             if (mode == ENABLE_ADD_MULTIPLE) {
                 addNextPickPhotoViewInParent()
@@ -92,7 +93,7 @@ internal class PickPhotoView(
     }
 
     fun setPathAsSelectedPicture(path: String?) {
-        val pictureBitmap = ImageUtils.getBitmapDrawableFromPath(context, path)
+        val pictureBitmap = imageFileHandler.getBitmapDrawableFromPath(context, path)
         if (pictureBitmap != null) {
             this.picturePath = path
             editPictureImageView.setImageDrawable(context.resources.getDrawable(R.drawable.ic_edit))
@@ -173,7 +174,7 @@ internal class PickPhotoView(
                 Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             galleryPhoto.type = "image/*"
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            takePhotoFileUri = ImageUtils.createFileAndGetURI(storageDir)
+            takePhotoFileUri = imageFileHandler.createFileAndGetURI(storageDir)
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, takePhotoFileUri)
             val chooser =
                 Intent.createChooser(galleryPhoto, context.resources.getString(R.string.gallery))

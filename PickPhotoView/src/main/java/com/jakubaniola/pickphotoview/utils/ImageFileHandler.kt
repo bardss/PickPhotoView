@@ -18,10 +18,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
-const val IMAGE_QUALITY_COMPRESS = 60
 typealias PictureSize = Pair<Int, Int>
 
-internal object ImageUtils {
+internal class ImageFileHandler(private val compressQuality: Int = 60) {
+
     fun getPathFromUri(context: Context, uri: Uri): String? {
         return when {
             uri.toString().contains("content:") -> getRealPathFromURI(context, uri)
@@ -54,7 +54,7 @@ internal object ImageUtils {
             val file = File(path)
             val rotateBitmap = performRotation(file, pictureBitmap)
             val resizedBitmap = resizeBitmapWhenTooLarge(rotateBitmap)
-            saveBitmap(resizedBitmap, IMAGE_QUALITY_COMPRESS, storageDir)
+            saveBitmap(resizedBitmap, compressQuality, storageDir)
         } else null
     }
 
@@ -66,7 +66,7 @@ internal object ImageUtils {
             val file = File(path)
             val rotateBitmap = performRotation(file, pictureBitmap)
             val resizedBitmap = resizeBitmapWhenTooLarge(rotateBitmap)
-            overwriteBitmap(resizedBitmap, IMAGE_QUALITY_COMPRESS, file)
+            overwriteBitmap(resizedBitmap, compressQuality, file)
         } else null
     }
 
@@ -197,7 +197,7 @@ internal object ImageUtils {
 
     private fun createFileNameWithTimeStamp(): String {
         val randomStamp = Random().nextLong().toString()
-        return "mood_timeline_$randomStamp"
+        return "pick_photo_$randomStamp"
     }
 
     private fun rotateImage(source: Bitmap, angle: Float): Bitmap {

@@ -7,6 +7,8 @@
         <entry key="PickPhotoView/src/main/res/drawable/ic_add_picture.xml" value="0.23645833333333333" />
         <entry key="PickPhotoView/src/main/res/drawable/ic_edit.xml" value="0.23645833333333333" />
         <entry key="PickPhotoView/src/main/res/drawable/ic_picture.xml" value="0.40520833333333334" />
+        <entry key="PickPhotoView/src/main/res/drawable/ic_picture_other.xml" value="0.16197916666666667" />
+        <entry key="PickPhotoView/src/main/res/layout/layout_full_screen.xml" value="0.2708333333333333" />
         <entry key="PickPhotoView/src/main/res/layout/view_pick_photo.xml" value="0.2898550724637681" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2898550724637681" />
       </map>

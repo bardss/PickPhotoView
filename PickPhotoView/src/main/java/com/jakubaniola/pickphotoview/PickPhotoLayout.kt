@@ -7,12 +7,16 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.children
+import com.jakubaniola.pickphotoview.utils.ImageFileHandler
+
+private const val DEFAULT_COMPRESS_QUALITY = 60
 
 class PickPhotoLayout : LinearLayout {
 
     private var pickPhotoActions: PickPhotoActions? = null
     private var pickPhotoReceiver: PickPhotoReceiver? = null
     private var mode: PickPhotoViewMode = PickPhotoViewMode.ONLY_SHOW
+    private lateinit var imageFileHandler: ImageFileHandler
     private lateinit var placeholderPicture: Drawable
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
@@ -35,11 +39,22 @@ class PickPhotoLayout : LinearLayout {
                 ?: context.resources.getDrawable(R.drawable.ic_picture)
             val modeValue = getInt(R.styleable.PickPhotoLayout_mode, 0)
             mode = PickPhotoViewMode.values()[modeValue]
+            val imageCompressQuality =
+                getInt(R.styleable.PickPhotoLayout_imageCompressQuality, DEFAULT_COMPRESS_QUALITY)
+            initImageFileHandler(imageCompressQuality)
         }
     }
 
     init {
         orientation = VERTICAL
+    }
+
+    private fun initImageFileHandler(imageCompressQuality: Int) {
+        if (imageCompressQuality < 1 || imageCompressQuality > 100) {
+            throw WrongCompressQualityException()
+        } else {
+            imageFileHandler = ImageFileHandler(imageCompressQuality)
+        }
     }
 
     fun setPickPhotoFragment(pickPhotoActions: PickPhotoActions) {
@@ -96,7 +111,7 @@ class PickPhotoLayout : LinearLayout {
     }
 
     private fun createPickPhotoView(): PickPhotoView {
-        return PickPhotoView(context, mode, placeholderPicture).apply {
+        return PickPhotoView(context, mode, placeholderPicture, imageFileHandler).apply {
             setPickPhotoFragment(pickPhotoActions)
         }
     }
