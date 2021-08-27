@@ -11,12 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.jakubaniola.pickphotoview.PickPhotoViewMode.ENABLE_ADD
-import com.jakubaniola.pickphotoview.PickPhotoViewMode.ONLY_SHOW
+import com.jakubaniola.pickphotoview.PickPhotoViewMode.*
 import com.jakubaniola.pickphotoview.utils.ImageUtils
 import com.jakubaniola.pickphotoview.utils.PermissionsUtil
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.random.Random
 
 
 internal class PickPhotoView(
@@ -30,7 +27,6 @@ internal class PickPhotoView(
     private val editPictureImageView: ImageView
     private var takePhotoFileUri: Uri? = null
     private var pickPhotoActions: PickPhotoActions? = null
-    private var pictureHighlighted = false
 
     var picturePath: String? = null
 
@@ -79,7 +75,6 @@ internal class PickPhotoView(
             val pathToOptimisedFile =
                 ImageUtils.saveOptimisedPictureFromPathAndReturnPath(pathToPhoto, storageDir)
             setPathAsSelectedPicture(pathToOptimisedFile)
-
         }
     }
 
@@ -90,7 +85,9 @@ internal class PickPhotoView(
             val pathToOptimisedFile =
                 ImageUtils.overwriteOptimisedPictureFromPathAndReturnPath(pathToPhoto)
             setPathAsSelectedPicture(pathToOptimisedFile)
-            addNextPickPhotoViewInParent()
+            if (mode == ENABLE_ADD_MULTIPLE) {
+                addNextPickPhotoViewInParent()
+            }
         }
     }
 
@@ -106,14 +103,14 @@ internal class PickPhotoView(
     private fun setupPickPhotoOnClick() {
         when (mode) {
 //            ONLY_SHOW -> onClickWithShowMode()
-            ENABLE_ADD -> setupOnPickPhotoClick()
+            ENABLE_ADD_ONE, ENABLE_ADD_MULTIPLE -> setupOnPickPhotoClick()
         }
     }
 
     private fun setupView() {
         when (mode) {
             ONLY_SHOW -> setupOnlyShowView()
-            ENABLE_ADD -> setupEnableAddView()
+            ENABLE_ADD_ONE, ENABLE_ADD_MULTIPLE -> setupEnableAddView()
         }
     }
 
@@ -130,30 +127,6 @@ internal class PickPhotoView(
         editPictureImageView.visibility = View.VISIBLE
         selectedPictureImageView.alpha = 0.4f
     }
-
-//    @SuppressLint("ClickableViewAccessibility")
-//    private fun onClickWithShowMode() {
-//        val duration = 250
-//        setOnTouchListener { view, event ->
-//            when (event.action) {
-//                ACTION_DOWN -> onPictureActionDown(duration, selectedPictureImageView)
-//                ACTION_UP -> onPictureActionUp(duration, selectedPictureImageView)
-//            }
-//            view.disableFor(duration)
-//            true
-//        }
-//    }
-//
-//    private fun onPictureActionUp(duration: Int, view: View) {
-//        if (pictureHighlighted) AnimUtils.animateAlpha(duration, 0.7f, view)
-//        pictureHighlighted = false
-//    }
-//
-//    private fun onPictureActionDown(duration: Int, view: View) {
-//        if (!pictureHighlighted) AnimUtils.animateAlpha(duration, 1f, view)
-//        pictureHighlighted = true
-//        Handler().postDelayed({ onPictureActionUp(duration, view) }, 3000)
-//    }
 
     private fun onClickWithAddMode() {
         takePhotoFileUri = null
@@ -202,7 +175,8 @@ internal class PickPhotoView(
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePhotoFileUri = ImageUtils.createFileAndGetURI(storageDir)
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, takePhotoFileUri)
-            val chooser = Intent.createChooser(galleryPhoto, context.resources.getString(R.string.gallery))
+            val chooser =
+                Intent.createChooser(galleryPhoto, context.resources.getString(R.string.gallery))
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
             pickPhotoActions?.startActivityForResult(chooser, requestPhotoCode)
         }

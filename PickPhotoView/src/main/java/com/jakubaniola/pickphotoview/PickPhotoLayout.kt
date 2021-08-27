@@ -44,7 +44,7 @@ class PickPhotoLayout : LinearLayout {
 
     fun setPickPhotoFragment(pickPhotoActions: PickPhotoActions) {
         this.pickPhotoActions = pickPhotoActions
-        if (mode == PickPhotoViewMode.ENABLE_ADD) {
+        if (mode.isAddEnabled()) {
             addPickPhotoView()
         }
     }

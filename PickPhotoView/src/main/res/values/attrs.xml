@@ -3,7 +3,8 @@
     <declare-styleable name="PickPhotoLayout">
         <attr name="mode" format="enum">
             <enum name="ONLY_SHOW" value="0"/>
-            <enum name="ENABLE_ADD" value="1"/>
+            <enum name="ENABLE_ADD_ONE" value="1"/>
+            <enum name="ENABLE_ADD_MULTIPLE" value="2"/>
         </attr>
         <attr name="placeholderPicture" format="integer"/>
     </declare-styleable>
