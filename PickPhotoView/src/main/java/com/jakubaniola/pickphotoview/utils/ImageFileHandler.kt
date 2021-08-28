@@ -70,14 +70,14 @@ internal class ImageFileHandler(private val compressQuality: Int = 60) {
         } else null
     }
 
-    fun getBitmapDrawableFromPath(context: Context, path: String?): RoundedBitmapDrawable? {
+    fun getBitmapDrawableFromPath(context: Context, path: String?, cornerRadius: Float = 20f): RoundedBitmapDrawable? {
         val pictureBitmap = BitmapFactory.decodeFile(path)
         return if (pictureBitmap != null) {
             val drawable = RoundedBitmapDrawableFactory.create(
                 context.resources,
                 pictureBitmap
             )
-            drawable.cornerRadius = 20f
+            drawable.cornerRadius = cornerRadius
             drawable
         } else null
     }

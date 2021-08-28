@@ -21,15 +21,15 @@ class PickPhotoLayout : LinearLayout {
     private lateinit var placeholderPicture: Drawable
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        savePickPhotoViewMode(context, attrs)
+        saveAttributes(context, attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
             : super(context, attrs, defStyleAttr) {
-        savePickPhotoViewMode(context, attrs)
+        saveAttributes(context, attrs)
     }
 
-    private fun savePickPhotoViewMode(
+    private fun saveAttributes(
         context: Context,
         attrs: AttributeSet?
     ) {
@@ -43,6 +43,7 @@ class PickPhotoLayout : LinearLayout {
             val imageCompressQuality =
                 getInt(R.styleable.PickPhotoLayout_imageCompressQuality, DEFAULT_COMPRESS_QUALITY)
             initImageFileHandler(imageCompressQuality)
+            recycle()
         }
     }
 
