@@ -8,6 +8,8 @@ import com.jakubaniola.pickphotoview.PickPhotoActions
 import com.jakubaniola.pickphotoview.PickPhotoLayout
 
 class MainActivity : AppCompatActivity(), PickPhotoActions {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -16,10 +18,16 @@ class MainActivity : AppCompatActivity(), PickPhotoActions {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        findViewById<PickPhotoLayout>(R.id.pick_photo_layout).onPicturePicked(requestCode, resultCode, data)
+        findViewById<PickPhotoLayout>(R.id.pick_photo_layout).onPicturePicked(
+            requestCode,
+            resultCode,
+            data
+        )
     }
 
-    override fun setOnCorrectPhotoPickListener(path: String) {
-        Log.e("onCorrectPhoto:", path)
+    override fun setOnCorrectPhotoPickListener(path: String, pickPhotoId: Int?) {
+        if (pickPhotoId == findViewById<PickPhotoLayout>(R.id.pick_photo_layout).pickPhotoViewId) {
+            Log.e("onCorrectPhoto:", path)
+        }
     }
 }

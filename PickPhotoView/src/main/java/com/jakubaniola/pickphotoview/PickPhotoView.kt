@@ -20,10 +20,10 @@ internal class PickPhotoView(
     context: Context,
     private val mode: PickPhotoViewMode,
     private val placeholderPicture: Drawable,
-    private val imageFileHandler: ImageFileHandler
+    private val imageFileHandler: ImageFileHandler,
+    private val pickPhotoViewId: Int
 ) : FrameLayout(context), PickPhotoReceiver {
 
-    private val requestPhotoCode = UniqueIdGenerator.generateNextId()
     private val selectedPictureImageView: ImageView
     private val editPictureImageView: ImageView
     private var takePhotoFileUri: Uri? = null
@@ -48,8 +48,8 @@ internal class PickPhotoView(
         this.pickPhotoActions = pickPhotoActions
     }
 
-    override fun onPicturePicked(requestCode: Int, resultCode: Int, intent: Intent?) {
-        if (requestCode == requestPhotoCode && resultCode == Activity.RESULT_OK) {
+    override fun onPicturePicked(resultCode: Int, intent: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
             intent?.data?.let { uri ->
                 onPickPhotoSuccess(uri)
             }
@@ -167,7 +167,7 @@ internal class PickPhotoView(
         val photoPickerIntent =
             Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         photoPickerIntent.type = "image/*"
-        pickPhotoActions?.startActivityForResult(photoPickerIntent, requestPhotoCode)
+        pickPhotoActions?.startActivityForResult(photoPickerIntent, pickPhotoViewId)
     }
 
     private fun startActivityGalleryAndCamera() {
@@ -182,13 +182,13 @@ internal class PickPhotoView(
             val chooser =
                 Intent.createChooser(galleryPhoto, context.resources.getString(R.string.gallery))
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
-            pickPhotoActions?.startActivityForResult(chooser, requestPhotoCode)
+            pickPhotoActions?.startActivityForResult(chooser, pickPhotoViewId)
         }
     }
 
     private fun notifyViewAboutCorrectPicturePick(path: String?) {
         if (path != null) {
-            pickPhotoActions?.setOnCorrectPhotoPickListener(path)
+            pickPhotoActions?.setOnCorrectPhotoPickListener(path, pickPhotoViewId)
         }
     }
 }

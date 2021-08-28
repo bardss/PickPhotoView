@@ -4,5 +4,5 @@ import android.content.Intent
 
 interface PickPhotoActions {
     fun startActivityForResult(intent: Intent, requestCode: Int)
-    fun setOnCorrectPhotoPickListener(path: String) { }
+    fun setOnCorrectPhotoPickListener(path: String, pickPhotoId: Int? = null) { }
 }

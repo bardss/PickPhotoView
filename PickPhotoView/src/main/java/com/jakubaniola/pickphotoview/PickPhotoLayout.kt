@@ -13,6 +13,7 @@ private const val DEFAULT_COMPRESS_QUALITY = 60
 
 class PickPhotoLayout : LinearLayout {
 
+    val pickPhotoViewId = UniqueIdGenerator.generateNextId()
     private var pickPhotoActions: PickPhotoActions? = null
     private var pickPhotoReceiver: PickPhotoReceiver? = null
     private var mode: PickPhotoViewMode = PickPhotoViewMode.ONLY_SHOW
@@ -93,7 +94,9 @@ class PickPhotoLayout : LinearLayout {
     }
 
     fun onPicturePicked(requestCode: Int, resultCode: Int, intent: Intent?) {
-        pickPhotoReceiver?.onPicturePicked(requestCode, resultCode, intent)
+        if (requestCode == pickPhotoViewId) {
+            pickPhotoReceiver?.onPicturePicked(resultCode, intent)
+        }
     }
 
     fun setPickPhotoReceiver(pickPhotoReceiver: PickPhotoReceiver) {
@@ -111,7 +114,13 @@ class PickPhotoLayout : LinearLayout {
     }
 
     private fun createPickPhotoView(): PickPhotoView {
-        return PickPhotoView(context, mode, placeholderPicture, imageFileHandler).apply {
+        return PickPhotoView(
+            context,
+            mode,
+            placeholderPicture,
+            imageFileHandler,
+            pickPhotoViewId
+        ).apply {
             setPickPhotoFragment(pickPhotoActions)
         }
     }
