@@ -5,11 +5,19 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import com.jakubaniola.pickphotoview.utils.ImageFileHandler
 import com.jakubaniola.pickphotoview.utils.PermissionsUtil
 
-class PickPhotoImageUtil(private val compressQuality: Int = 60) {
+class PickPhotoImageUtil(
+    private val context: Context,
+    private val compressQuality: Int = 60
+) {
 
-    fun getBitmapFromPath(context: Context, path: String?, cornerRadius: Float = 20f): RoundedBitmapDrawable? {
+    private val imageFileHandler = ImageFileHandler(compressQuality)
+
+    fun getBitmapFromPath(
+        path: String?,
+        cornerRadius: Float = 20f
+    ): RoundedBitmapDrawable? {
         return if (PermissionsUtil.isStoragePermissionGranted(context)) {
-             ImageFileHandler(compressQuality).getBitmapDrawableFromPath(context, path, cornerRadius)
+            ImageFileHandler(compressQuality).getBitmapDrawableFromPath(context, path, cornerRadius)
         } else null
     }
 }
