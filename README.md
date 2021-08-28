@@ -87,7 +87,7 @@ allprojects {
 Add the dependency
 ```
 dependencies {
-    implementation 'com.github.bardss:PaintableVectorView:CURRENT_VERSION'
+    implementation 'com.github.bardss:PickPhotoView:CURRENT_VERSION'
 }
 ```
 
