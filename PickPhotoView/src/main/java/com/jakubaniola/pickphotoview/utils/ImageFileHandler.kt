@@ -196,8 +196,8 @@ internal class ImageFileHandler(private val compressQuality: Int = 60) {
     }
 
     private fun createFileNameWithTimeStamp(): String {
-        val randomStamp = Random().nextLong().toString()
-        return "pick_photo_$randomStamp"
+        val stamp = System.currentTimeMillis()
+        return "pick_photo_$stamp"
     }
 
     private fun rotateImage(source: Bitmap, angle: Float): Bitmap {

@@ -59,6 +59,7 @@ internal class PickPhotoView(
         }
     }
 
+
     private fun addNextPickPhotoViewInParent() {
         val parent = parent as PickPhotoLayout
         parent.addPickPhotoView()
@@ -76,6 +77,7 @@ internal class PickPhotoView(
             val pathToOptimisedFile =
                 imageFileHandler.saveOptimisedPictureFromPathAndReturnPath(pathToPhoto, storageDir)
             setPathAsSelectedPicture(pathToOptimisedFile)
+            notifyViewAboutCorrectPicturePick(pathToOptimisedFile)
         }
     }
 
@@ -86,6 +88,7 @@ internal class PickPhotoView(
             val pathToOptimisedFile =
                 imageFileHandler.overwriteOptimisedPictureFromPathAndReturnPath(pathToPhoto)
             setPathAsSelectedPicture(pathToOptimisedFile)
+            notifyViewAboutCorrectPicturePick(pathToOptimisedFile)
             if (mode == ENABLE_ADD_MULTIPLE) {
                 addNextPickPhotoViewInParent()
             }
@@ -180,6 +183,12 @@ internal class PickPhotoView(
                 Intent.createChooser(galleryPhoto, context.resources.getString(R.string.gallery))
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
             pickPhotoActions?.startActivityForResult(chooser, requestPhotoCode)
+        }
+    }
+
+    private fun notifyViewAboutCorrectPicturePick(path: String?) {
+        if (path != null) {
+            pickPhotoActions?.setOnCorrectPhotoPickListener(path)
         }
     }
 }
