@@ -67,7 +67,7 @@ class PickPhotoLayout : LinearLayout {
     }
 
     fun setPictures(picturePaths: List<String>) {
-        if (picturePaths.isNotEmpty() || !isPicturePathsEmpty(picturePaths)) {
+        if (picturePaths.isNotEmpty() && !isPicturePathsEmpty(picturePaths)) {
             visibility = View.VISIBLE
             val numberOfPictures = picturePaths.size
             for (i in getPickPhotoViewCount() until numberOfPictures) {
