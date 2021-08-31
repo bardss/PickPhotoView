@@ -70,7 +70,7 @@ class PickPhotoLayout : LinearLayout {
         if (!isPicturePathsEmpty(picturePaths)) {
             visibility = View.VISIBLE
             val numberOfPictures = picturePaths.size
-            for (i in 0 until numberOfPictures) {
+            for (i in getPickPhotoViewCount() until numberOfPictures) {
                 addView(createPickPhotoView())
             }
             forEachPickPhotoViewIndexed { index, view ->
@@ -107,6 +107,11 @@ class PickPhotoLayout : LinearLayout {
     fun addPickPhotoView() {
         addView(createPickPhotoView())
     }
+
+    private fun getPickPhotoViewCount(): Int =
+        children
+            .filterIsInstance<PickPhotoView>()
+            .count()
 
     private fun forEachPickPhotoViewIndexed(action: (Int, PickPhotoView) -> Unit) {
         children

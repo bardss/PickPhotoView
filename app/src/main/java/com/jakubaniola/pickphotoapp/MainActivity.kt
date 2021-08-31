@@ -9,7 +9,6 @@ import com.jakubaniola.pickphotoview.PickPhotoLayout
 
 class MainActivity : AppCompatActivity(), PickPhotoActions {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
