@@ -67,7 +67,7 @@ class PickPhotoLayout : LinearLayout {
     }
 
     fun setPictures(picturePaths: List<String>) {
-        if (!isPicturePathsEmpty(picturePaths)) {
+        if (picturePaths.isNotEmpty() || !isPicturePathsEmpty(picturePaths)) {
             visibility = View.VISIBLE
             val numberOfPictures = picturePaths.size
             for (i in getPickPhotoViewCount() until numberOfPictures) {
@@ -78,7 +78,9 @@ class PickPhotoLayout : LinearLayout {
                     view.setPathAsSelectedPicture(path)
                 }
             }
-        } else visibility = View.GONE
+        } else if (mode == PickPhotoViewMode.ONLY_SHOW) {
+            visibility = View.GONE
+        }
     }
 
     private fun isPicturePathsEmpty(picturePaths: List<String>): Boolean {
